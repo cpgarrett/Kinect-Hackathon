@@ -29,8 +29,13 @@
         </DockPanel>
         <Viewbox Grid.Row="1" Stretch="Uniform" HorizontalAlignment="Center">
             <Grid Name="MainGrid" Width="640" Height="480">
-                <Image Name="ColorImage"/>
-                <local:FaceTrackingViewer x:Name="faceTrackingViewer" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="65"/>
+                </Grid.RowDefinitions>   
+                <Image Name="ColorImage" Grid.Row="0"/>
+                <local:FaceTrackingViewer x:Name="faceTrackingViewer" Grid.Row="0" />
+                <local:AuthenticationBar x:Name="authenticationbar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" />
             </Grid>
         </Viewbox>
    </Grid>
