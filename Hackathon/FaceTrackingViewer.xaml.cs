@@ -198,9 +198,9 @@ namespace Hackathon
             }
         }
 
-        public delegate void FacialModelCreatedEventHandler(object sender, FacialModelCreatedEventArgs e);
+        internal delegate void FacialModelCreatedEventHandler(object sender, FacialModelCreatedEventArgs e);
 
-        public event FacialModelCreatedEventHandler FacialModeCreated;
+        internal event FacialModelCreatedEventHandler FacialModeCreated;
 
         private void OnFacialModelCreated(FacialModel model)
         {

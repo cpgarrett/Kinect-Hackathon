@@ -12,8 +12,8 @@ namespace Hackathon
 {
     class FacialModel
     {
-        private readonly EnumIndexableCollection<FeaturePoint, Vector3DF> Features { get; private set; }
-        private static const float threshold = 0.01f;
+        public EnumIndexableCollection<FeaturePoint, Vector3DF> Features { get; private set; }
+        private static float threshold = 0.01f;
 
         public FacialModel(EnumIndexableCollection<FeaturePoint, Vector3DF> features)
         {
@@ -77,7 +77,7 @@ namespace Hackathon
             double dz = (double)(feature3df.Z - reference.Z);
 
             double d_2 = Math.Pow(dx, 2) + Math.Pow(dy, 2) + Math.Pow(dz, 2);
-            return 0.5f;
+            return (float) d_2;
         }
     }
 }

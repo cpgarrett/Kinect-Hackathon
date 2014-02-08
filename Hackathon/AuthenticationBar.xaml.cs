@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FaceTrackingBasics
+namespace Hackathon
 {
     /// <summary>
     /// Interaction logic for AuthenticationBar.xaml
