@@ -197,6 +197,18 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             return new EnumIndexableCollection<FeaturePoint, Vector3DF>(faceTracker.FaceModel.Get3DShape(this));
         }
 
+        //get 3D Model in model space
+        public EnumIndexableCollection<FeaturePoint, Vector3DF> Get3DModel()
+        {
+            var faceTracker = this.parentFaceTracker.Target as FaceTracker;
+            if (faceTracker == null)
+            {
+                throw new ObjectDisposedException("FaceTracker", "Underlying face object has been garbage collected. Cannot copy.");
+            }
+
+            return new EnumIndexableCollection<FeaturePoint, Vector3DF>(faceTracker.FaceModel.Get3DModel(this));
+        }
+
         /// <summary>
         /// Returns Animation Units (AUs) coefficients. These coefficients represent deformations 
         /// of the 3D mask caused by the moving parts of the face (mouth, eyebrows, etc). Use the 

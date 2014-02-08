@@ -81,13 +81,35 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             this.faceTracker.FaceTrackerPtr.GetShapeUnits(out scale, out shapeUnitCoeffPtr, ref shapeUnitCount, out hasSuConverged);
 
             return this.Get3DShape(
-                shapeUnitCoeffPtr, 
-                shapeUnitCount, 
-                animUnitCoeffPtr, 
-                animUnitPointsCount, 
-                faceTrackFrame.Scale, 
-                faceTrackFrame.Rotation, 
+                shapeUnitCoeffPtr,
+                shapeUnitCount,
+                animUnitCoeffPtr,
+                animUnitPointsCount,
+                faceTrackFrame.Scale,
+                faceTrackFrame.Rotation,
                 faceTrackFrame.Translation);
+        }
+
+        public Vector3DF[] Get3DModel(FaceTrackFrame faceTrackFrame)
+        {
+            IntPtr shapeUnitCoeffPtr;
+            uint shapeUnitCount = 0;
+            IntPtr animUnitCoeffPtr;
+            uint animUnitPointsCount;
+            bool hasSuConverged;
+            float scale;
+
+            faceTrackFrame.ResultPtr.GetAUCoefficients(out animUnitCoeffPtr, out animUnitPointsCount);
+            this.faceTracker.FaceTrackerPtr.GetShapeUnits(out scale, out shapeUnitCoeffPtr, ref shapeUnitCount, out hasSuConverged);
+
+            return this.Get3DShape(
+                shapeUnitCoeffPtr,
+                shapeUnitCount,
+                animUnitCoeffPtr,
+                animUnitPointsCount,
+                (float)1,
+                new Vector3DF(0, 0, 0),
+                new Vector3DF(0, 0, 0));
         }
 
         public PointF[] GetProjected3DShape(float zoomFactor, Point viewOffset, FaceTrackFrame faceTrackFrame)
@@ -104,15 +126,15 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             this.faceTracker.FaceTrackerPtr.GetShapeUnits(out scale, out shapeUnitCoeffPtr, ref shapeUnitCount, out hasSuConverged);
 
             return this.GetProjected3DShape(
-                this.faceTracker.ColorCameraConfig, 
-                zoomFactor, 
-                viewOffset, 
-                shapeUnitCoeffPtr, 
-                shapeUnitCount, 
-                animUnitCoeffPtr, 
-                animUnitPointsCount, 
-                faceTrackFrame.Scale, 
-                faceTrackFrame.Rotation, 
+                this.faceTracker.ColorCameraConfig,
+                zoomFactor,
+                viewOffset,
+                shapeUnitCoeffPtr,
+                shapeUnitCount,
+                animUnitCoeffPtr,
+                animUnitPointsCount,
+                faceTrackFrame.Scale,
+                faceTrackFrame.Rotation,
                 faceTrackFrame.Translation);
         }
 
@@ -177,12 +199,12 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         }
 
         private Vector3DF[] Get3DShape(
-            IntPtr shapeUnitCoeffPtr, 
-            uint shapeUnitCoeffCount, 
-            IntPtr animUnitCoeffPtr, 
-            uint animUnitCoeffCount, 
-            float scale, 
-            Vector3DF rotation, 
+            IntPtr shapeUnitCoeffPtr,
+            uint shapeUnitCoeffCount,
+            IntPtr animUnitCoeffPtr,
+            uint animUnitCoeffCount,
+            float scale,
+            Vector3DF rotation,
             Vector3DF translation)
         {
             this.CheckPtrAndThrow();
@@ -206,14 +228,14 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
                 {
                     faceModel3DVerticesPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Vector3DF)) * (int)vertexCount);
                     this.faceTrackingModelPtr.Get3DShape(
-                        shapeUnitCoeffPtr, 
-                        shapeUnitCoeffCount, 
-                        animUnitCoeffPtr, 
-                        animUnitCoeffCount, 
-                        scale, 
-                        ref rotation, 
-                        ref translation, 
-                        faceModel3DVerticesPtr, 
+                        shapeUnitCoeffPtr,
+                        shapeUnitCoeffCount,
+                        animUnitCoeffPtr,
+                        animUnitCoeffCount,
+                        scale,
+                        ref rotation,
+                        ref translation,
+                        faceModel3DVerticesPtr,
                         vertexCount);
                     faceModel3DShape = new Vector3DF[vertexCount];
                     for (int i = 0; i < (int)vertexCount; i++)
@@ -248,15 +270,15 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         }
 
         private PointF[] GetProjected3DShape(
-            CameraConfig videoCameraConfig, 
-            float zoomFactor, 
-            Point viewOffset, 
-            IntPtr shapeUnitCoeffPtr, 
-            uint shapeUnitCoeffCount, 
-            IntPtr animUnitCoeffPtr, 
-            uint animUnitCoeffCount, 
-            float scale, 
-            Vector3DF rotation, 
+            CameraConfig videoCameraConfig,
+            float zoomFactor,
+            Point viewOffset,
+            IntPtr shapeUnitCoeffPtr,
+            uint shapeUnitCoeffCount,
+            IntPtr animUnitCoeffPtr,
+            uint animUnitCoeffCount,
+            float scale,
+            Vector3DF rotation,
             Vector3DF translation)
         {
             this.CheckPtrAndThrow();
@@ -280,17 +302,17 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
                 {
                     faceModel3DVerticesPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(Vector3DF)) * (int)vertexCount);
                     this.faceTrackingModelPtr.GetProjectedShape(
-                        videoCameraConfig, 
-                        zoomFactor, 
-                        viewOffset, 
-                        shapeUnitCoeffPtr, 
-                        shapeUnitCoeffCount, 
-                        animUnitCoeffPtr, 
-                        animUnitCoeffCount, 
-                        scale, 
-                        ref rotation, 
-                        ref translation, 
-                        faceModel3DVerticesPtr, 
+                        videoCameraConfig,
+                        zoomFactor,
+                        viewOffset,
+                        shapeUnitCoeffPtr,
+                        shapeUnitCoeffCount,
+                        animUnitCoeffPtr,
+                        animUnitCoeffCount,
+                        scale,
+                        ref rotation,
+                        ref translation,
+                        faceModel3DVerticesPtr,
                         vertexCount);
                     faceModelProjected3DShape = new PointF[vertexCount];
                     for (int i = 0; i < (int)vertexCount; i++)

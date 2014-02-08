@@ -16,7 +16,7 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
     {
         private readonly TValue[] valueArray;
 
-        internal EnumIndexableCollection(TValue[] valueArray)
+        public EnumIndexableCollection(TValue[] valueArray)
         {
             this.valueArray = valueArray;
         }

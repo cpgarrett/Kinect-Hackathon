@@ -25,9 +25,9 @@ namespace FaceTrackingBasics
     public partial class FaceTrackingViewer : UserControl, IDisposable
     {
         public static readonly DependencyProperty KinectProperty = DependencyProperty.Register(
-            "Kinect", 
-            typeof(KinectSensor), 
-            typeof(FaceTrackingViewer), 
+            "Kinect",
+            typeof(KinectSensor),
+            typeof(FaceTrackingViewer),
             new PropertyMetadata(
                 null, (o, args) => ((FaceTrackingViewer)o).OnSensorChanged((KinectSensor)args.OldValue, (KinectSensor)args.NewValue)));
 
@@ -138,7 +138,7 @@ namespace FaceTrackingBasics
                 {
                     this.colorImage = new byte[colorImageFrame.PixelDataLength];
                 }
-                
+
                 // Get the skeleton information
                 if (this.skeletonData == null || this.skeletonData.Length != skeletonFrame.SkeletonArrayLength)
                 {
@@ -269,7 +269,7 @@ namespace FaceTrackingBasics
 
             private bool lastFaceTrackSucceeded;
 
-            public SkeletonTrackingState SkeletonTrackingState { get; private set;}
+            public SkeletonTrackingState SkeletonTrackingState { get; private set; }
 
             public int LastTrackedFrame { get; set; }
 

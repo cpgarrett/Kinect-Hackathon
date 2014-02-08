@@ -100,12 +100,12 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
                             CultureInfo.InvariantCulture, "---------------------------------------------------------------------------"));
                     Trace.WriteLine(
                         string.Format(
-                            CultureInfo.InvariantCulture, 
-                            "Starting Trace. Time={0} {1}, Machine={2}, Processor={3}, OS={4}", 
-                            cur.ToShortDateString(), 
-                            cur.ToLongTimeString(), 
-                            Environment.MachineName, 
-                            Environment.Is64BitProcess ? "64bit" : "32bit", 
+                            CultureInfo.InvariantCulture,
+                            "Starting Trace. Time={0} {1}, Machine={2}, Processor={3}, OS={4}",
+                            cur.ToShortDateString(),
+                            cur.ToLongTimeString(),
+                            Environment.MachineName,
+                            Environment.Is64BitProcess ? "64bit" : "32bit",
                             Environment.OSVersion));
                     Trace.WriteLine(
                         string.Format(
@@ -148,14 +148,14 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             this.initializationDepthImageFormat = sensor.DepthStream.Format;
 
             var newColorCameraConfig = new CameraConfig(
-                (uint)sensor.ColorStream.FrameWidth, 
-                (uint)sensor.ColorStream.FrameHeight, 
-                sensor.ColorStream.NominalFocalLengthInPixels, 
+                (uint)sensor.ColorStream.FrameWidth,
+                (uint)sensor.ColorStream.FrameHeight,
+                sensor.ColorStream.NominalFocalLengthInPixels,
                 FaceTrackingImageFormat.FTIMAGEFORMAT_UINT8_B8G8R8X8);
             var newDepthCameraConfig = new CameraConfig(
-                (uint)sensor.DepthStream.FrameWidth, 
-                (uint)sensor.DepthStream.FrameHeight, 
-                sensor.DepthStream.NominalFocalLengthInPixels, 
+                (uint)sensor.DepthStream.FrameWidth,
+                (uint)sensor.DepthStream.FrameHeight,
+                sensor.DepthStream.NominalFocalLengthInPixels,
                 FaceTrackingImageFormat.FTIMAGEFORMAT_UINT16_D13P3);
             this.Initialize(newColorCameraConfig, newDepthCameraConfig, IntPtr.Zero, IntPtr.Zero, this.DepthToColorCallback);
         }
@@ -260,10 +260,10 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// <param name="skeletonOfInterest">Input skeleton to track. Head and shoulder joints in the skeleton are used to calculate the head vector</param>
         /// <returns>Returns computed face tracking results for this image frame</returns>
         public FaceTrackFrame Track(
-            ColorImageFormat colorImageFormat, 
-            byte[] colorImage, 
-            DepthImageFormat depthImageFormat, 
-            short[] depthImage, 
+            ColorImageFormat colorImageFormat,
+            byte[] colorImage,
+            DepthImageFormat depthImageFormat,
+            short[] depthImage,
             Skeleton skeletonOfInterest)
         {
             return this.Track(colorImageFormat, colorImage, depthImageFormat, depthImage, skeletonOfInterest, Rect.Empty);
@@ -297,10 +297,10 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// Returns computed face tracking results for this image frame
         /// </returns>
         public FaceTrackFrame Track(
-            ColorImageFormat colorImageFormat, 
-            byte[] colorImage, 
-            DepthImageFormat depthImageFormat, 
-            short[] depthImage, 
+            ColorImageFormat colorImageFormat,
+            byte[] colorImage,
+            DepthImageFormat depthImageFormat,
+            short[] depthImage,
             Rect regionOfInterest)
         {
             return this.Track(colorImageFormat, colorImage, depthImageFormat, depthImage, null, regionOfInterest);
@@ -366,13 +366,13 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             if (!this.disposed)
             {
                 string traceStr = string.Format(
-                    CultureInfo.InvariantCulture, 
-                    "FaceTracker::Dispose() - TotalTracks={0}, TotalSuccessTracks={1}, TimePerTrack={2:F3}ms, TimePerSuccessTrack={3:F3}ms, TimePerDataCopy={4:F3}ms, TimePerStartOrContinueTracking={5:F3}ms", 
-                    this.totalTracks, 
-                    this.totalSuccessTracks, 
-                    this.totalTracks > 0 ? (double)this.trackStopwatch.ElapsedMilliseconds / this.totalTracks : 0, 
-                    this.totalSuccessTracks > 0 ? (double)this.totalSuccessTrackMs / this.totalSuccessTracks : 0, 
-                    this.totalTracks > 0 ? (double)this.copyStopwatch.ElapsedMilliseconds / this.totalTracks : 0, 
+                    CultureInfo.InvariantCulture,
+                    "FaceTracker::Dispose() - TotalTracks={0}, TotalSuccessTracks={1}, TimePerTrack={2:F3}ms, TimePerSuccessTrack={3:F3}ms, TimePerDataCopy={4:F3}ms, TimePerStartOrContinueTracking={5:F3}ms",
+                    this.totalTracks,
+                    this.totalSuccessTracks,
+                    this.totalTracks > 0 ? (double)this.trackStopwatch.ElapsedMilliseconds / this.totalTracks : 0,
+                    this.totalSuccessTracks > 0 ? (double)this.totalSuccessTrackMs / this.totalSuccessTracks : 0,
+                    this.totalTracks > 0 ? (double)this.copyStopwatch.ElapsedMilliseconds / this.totalTracks : 0,
                     this.totalTracks > 0 ? (double)this.startOrContinueTrackingStopwatch.ElapsedMilliseconds / this.totalTracks : 0);
 #if DEBUG
                 Debug.WriteLine(traceStr);
@@ -456,16 +456,16 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// The depth to color callback.
         /// </returns>
         private int DepthToColorCallback(
-            uint depthFrameWidth, 
-            uint depthFrameHeight, 
-            uint colorFrameWidth, 
-            uint colorFrameHeight, 
-            float zoomFactor, 
-            Point viewOffset, 
-            int depthX, 
-            int depthY, 
-            ushort depthZ, 
-            out int colorX, 
+            uint depthFrameWidth,
+            uint depthFrameHeight,
+            uint colorFrameWidth,
+            uint colorFrameHeight,
+            float zoomFactor,
+            Point viewOffset,
+            int depthX,
+            int depthY,
+            ushort depthZ,
+            out int colorX,
             out int colorY)
         {
             int retCode = 0;
@@ -492,11 +492,11 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
                 catch (InvalidOperationException e)
                 {
                     string traceStr = string.Format(
-                        CultureInfo.CurrentCulture, 
-                        "Exception on MapDepthToColorImagePoint while translating depth point({0},{1},{2}). Exception={3}", 
-                        depthX, 
-                        depthY, 
-                        depthZ, 
+                        CultureInfo.CurrentCulture,
+                        "Exception on MapDepthToColorImagePoint while translating depth point({0},{1},{2}). Exception={3}",
+                        depthX,
+                        depthY,
+                        depthZ,
                         e.Message);
                     Trace.WriteLineIf(this.traceLevel >= TraceLevel.Error, traceStr, TraceCategory);
 
@@ -525,10 +525,10 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// If set to IntPtr.Zero, image data needs to be provided for tracking to this instance.</param>
         /// <param name="newRegisterDepthToColorDelegate">Callback which maps of depth to color pixels</param>
         private void Initialize(
-            CameraConfig newColorCameraConfig, 
-            CameraConfig newDepthCameraConfig, 
-            IntPtr colorImagePtr, 
-            IntPtr depthImagePtr, 
+            CameraConfig newColorCameraConfig,
+            CameraConfig newDepthCameraConfig,
+            IntPtr colorImagePtr,
+            IntPtr depthImagePtr,
             FaceTrackingRegisterDepthToColor newRegisterDepthToColorDelegate)
         {
             if (newColorCameraConfig == null)
@@ -592,10 +592,10 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             else
             {
                 this.colorFaceTrackingImage.Attach(
-                    this.videoCameraConfig.Width, 
-                    this.videoCameraConfig.Height, 
-                    colorImagePtr, 
-                    this.videoCameraConfig.ImageFormat, 
+                    this.videoCameraConfig.Width,
+                    this.videoCameraConfig.Height,
+                    colorImagePtr,
+                    this.videoCameraConfig.ImageFormat,
                     this.videoCameraConfig.Stride);
             }
 
@@ -608,10 +608,10 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
             else
             {
                 this.depthFaceTrackingImage.Attach(
-                    this.depthCameraConfig.Width, 
-                    this.depthCameraConfig.Height, 
-                    depthImagePtr, 
-                    this.depthCameraConfig.ImageFormat, 
+                    this.depthCameraConfig.Width,
+                    this.depthCameraConfig.Height,
+                    depthImagePtr,
+                    this.depthCameraConfig.ImageFormat,
                     this.depthCameraConfig.Stride);
             }
         }
@@ -633,11 +633,11 @@ namespace Microsoft.Kinect.Toolkit.FaceTracking
         /// Passing Rectangle.Empty (default) causes the entire frame to be searched.</param>
         /// <returns>Returns computed face tracking results for this image frame</returns>
         private FaceTrackFrame Track(
-            ColorImageFormat colorImageFormat, 
-            byte[] colorImage, 
-            DepthImageFormat depthImageFormat, 
-            short[] depthImage, 
-            Skeleton skeletonOfInterest, 
+            ColorImageFormat colorImageFormat,
+            byte[] colorImage,
+            DepthImageFormat depthImageFormat,
+            short[] depthImage,
+            Skeleton skeletonOfInterest,
             Rect regionOfInterest)
         {
             this.totalTracks++;
