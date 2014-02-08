@@ -13,7 +13,7 @@ namespace Hackathon
     class FacialModel
     {
         public EnumIndexableCollection<FeaturePoint, Vector3DF> Features { get; private set; }
-        private static float threshold = 0.01f;
+        private static float threshold = 0.05f;
         public string Name { get; private set; }
 
         public FacialModel(EnumIndexableCollection<FeaturePoint, Vector3DF> features)
@@ -77,15 +77,14 @@ namespace Hackathon
             }
         }
 
-        public float match(FeaturePoint feature, Vector3DF feature3df)
+        public bool match(FeaturePoint feature, Vector3DF feature3df)
         {
             Vector3DF reference = Features[feature];
-            double dx = (double) (feature3df.X - reference.X);
+            double dx = (double)(feature3df.X - reference.X);
             double dy = (double)(feature3df.Y - reference.Y);
             double dz = (double)(feature3df.Z - reference.Z);
-
-            double d_2 = Math.Pow(dx, 2) + Math.Pow(dy, 2) + Math.Pow(dz, 2);
-            return (float) d_2;
+                        
+            return  ((dx <= threshold) && (dy <= threshold) && (dz <= threshold));
         }
     }
 }
