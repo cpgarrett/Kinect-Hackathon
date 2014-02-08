@@ -57,6 +57,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SkeletonFaceTrcker.cs" />
+    <Compile Include="ThresholdGraph.xaml.cs">
+      <DependentUpon>ThresholdGraph.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AuthenticationBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FaceTrackingViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,6 +77,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AuthenticationBar.xaml.cs">
+      <DependentUpon>AuthenticationBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FaceTrackingViewer.xaml.cs">
       <DependentUpon>FaceTrackingViewer.xaml</DependentUpon>
     </Compile>
@@ -76,6 +87,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ThresholdGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

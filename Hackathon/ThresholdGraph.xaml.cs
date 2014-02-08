@@ -1,34 +1,32 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FaceTrackingViewer.xaml.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Microsoft.Kinect;
 
 namespace Hackathon
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Microsoft.Kinect;
-    using Microsoft.Kinect.Toolkit.FaceTracking;
-
-    using Point = System.Windows.Point;
-
     /// <summary>
-    /// Class that uses the Face Tracking SDK to display a face mask for
-    /// tracked skeletons
+    /// Interaction logic for ThresholdGraph.xaml
     /// </summary>
-    public partial class FaceTrackingViewer : UserControl, IDisposable
+    public partial class ThresholdGraph : UserControl, IDisposable
     {
         public static readonly DependencyProperty KinectProperty = DependencyProperty.Register(
-            "Kinect", 
-            typeof(KinectSensor), 
-            typeof(FaceTrackingViewer), 
+            "Kinect",
+            typeof(KinectSensor),
+            typeof(FaceTrackingViewer),
             new PropertyMetadata(
-                null, (o, args) => ((FaceTrackingViewer)o).OnSensorChanged((KinectSensor)args.OldValue, (KinectSensor)args.NewValue)));
+                null, (o, args) => ((ThresholdGraph)o).OnSensorChanged((KinectSensor)args.OldValue, (KinectSensor)args.NewValue)));
 
         private const uint MaxMissedFrames = 100;
 
@@ -46,14 +44,23 @@ namespace Hackathon
 
         private Skeleton[] skeletonData;
 
-        public FaceTrackingViewer()
+        public ThresholdGraph()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        ~FaceTrackingViewer()
+        private void OnSensorChanged(KinectSensor oldSensor, KinectSensor newSensor)
         {
-            this.Dispose(false);
+            if (oldSensor != null)
+            {
+                oldSensor.AllFramesReady -= this.OnAllFramesReady;
+                this.ResetFaceTracking();
+            }
+
+            if (newSensor != null)
+            {
+                newSensor.AllFramesReady += this.OnAllFramesReady;
+            }
         }
 
         public KinectSensor Kinect
@@ -66,31 +73,6 @@ namespace Hackathon
             set
             {
                 this.SetValue(KinectProperty, value);
-            }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                this.ResetFaceTracking();
-
-                this.disposed = true;
-            }
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            foreach (SkeletonFaceTracker faceInformation in this.trackedSkeletons.Values)
-            {
-                faceInformation.DrawFaceModel(drawingContext);
             }
         }
 
@@ -137,7 +119,7 @@ namespace Hackathon
                 {
                     this.colorImage = new byte[colorImageFrame.PixelDataLength];
                 }
-                
+
                 // Get the skeleton information
                 if (this.skeletonData == null || this.skeletonData.Length != skeletonFrame.SkeletonArrayLength)
                 {
@@ -193,17 +175,11 @@ namespace Hackathon
             }
         }
 
-        private void OnSensorChanged(KinectSensor oldSensor, KinectSensor newSensor)
+        private void ResetFaceTracking()
         {
-            if (oldSensor != null)
+            foreach (int trackingId in new List<int>(this.trackedSkeletons.Keys))
             {
-                oldSensor.AllFramesReady -= this.OnAllFramesReady;
-                this.ResetFaceTracking();
-            }
-
-            if (newSensor != null)
-            {
-                newSensor.AllFramesReady += this.OnAllFramesReady;
+                this.RemoveTracker(trackingId);
             }
         }
 
@@ -235,15 +211,5 @@ namespace Hackathon
             this.trackedSkeletons[trackingId].Dispose();
             this.trackedSkeletons.Remove(trackingId);
         }
-
-        private void ResetFaceTracking()
-        {
-            foreach (int trackingId in new List<int>(this.trackedSkeletons.Keys))
-            {
-                this.RemoveTracker(trackingId);
-            }
-        }
-
-        
     }
 }
