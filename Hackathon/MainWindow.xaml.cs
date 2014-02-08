@@ -12,7 +12,9 @@ namespace Hackathon
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Collections.Generic;
     using Microsoft.Kinect.Toolkit;
+    using System.IO;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,10 +26,18 @@ namespace Hackathon
         private WriteableBitmap colorImageWritableBitmap;
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
+        private FacialModel model;
+        private string path;
+        private HashSet<FacialModel> models = new HashSet<FacialModel>();
+
 
         public MainWindow()
         {
             InitializeComponent();
+
+            path = System.IO.Directory.GetCurrentDirectory();
+
+            LoadModels();
 
             var faceTrackingViewerBinding = new Binding("Kinect") { Source = sensorChooser };
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
@@ -127,6 +137,39 @@ namespace Hackathon
                     this.colorImageData,
                     colorImageFrame.Width * Bgr32BytesPerPixel,
                     0);
+            }
+        }
+
+        private void captureBaseImage_Click(object sender, RoutedEventArgs e)
+        {
+            NamePrompt prompt = new NamePrompt();
+
+            prompt.Show();
+
+            while (!prompt.Close) ;
+
+            string text = prompt.Text;
+
+            prompt.Close();
+
+            if(!string.IsNullOrWhiteSpace(text))
+            {
+                if(model != null)
+                {
+                    model.Write(path + text + ".model");
+                    models.Add(model);
+                }
+            }
+        }
+
+        private void LoadModels()
+        {
+            foreach(FileInfo fi in (new DirectoryInfo(Directory.GetCurrentDirectory()).EnumerateFiles()))
+            {
+                if(fi.Name.Contains(".model"))
+                {
+                    models.Add(new FacialModel(fi.Name));
+                }
             }
         }
     }
