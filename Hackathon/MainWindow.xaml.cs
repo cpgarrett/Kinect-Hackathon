@@ -27,7 +27,7 @@ namespace Hackathon
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
         private FacialModel model;
-        private string path;
+        private string path = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\Hackathon\Models\");
         private HashSet<FacialModel> models = new HashSet<FacialModel>();
 
 
@@ -35,7 +35,8 @@ namespace Hackathon
         {
             InitializeComponent();
 
-            path = System.IO.Directory.GetCurrentDirectory();
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
             LoadModels();
 
@@ -49,7 +50,7 @@ namespace Hackathon
 
         void faceTrackingViewer_FacialModeCreated(object sender, FacialModelCreatedEventArgs e)
         {
-
+            model = e.FacialModel;
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs kinectChangedEventArgs)
@@ -142,33 +143,28 @@ namespace Hackathon
 
         private void captureBaseImage_Click(object sender, RoutedEventArgs e)
         {
-            NamePrompt prompt = new NamePrompt();
-
-            prompt.Show();
-
-            while (!prompt.Close) ;
-
-            string text = prompt.Text;
-
-            prompt.Close();
-
-            if(!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(userName.Text))
             {
-                if(model != null)
+                string text = userName.Text;
+
+                if (!string.IsNullOrWhiteSpace(text))
                 {
-                    model.Write(path + text + ".model");
-                    models.Add(model);
+                    if (model != null)
+                    {
+                        model.Write(path + text + ".model");
+                        models.Add(model);
+                    }
                 }
             }
         }
 
         private void LoadModels()
         {
-            foreach(FileInfo fi in (new DirectoryInfo(Directory.GetCurrentDirectory()).EnumerateFiles()))
+            foreach(FileInfo fi in (new DirectoryInfo(path).EnumerateFiles()))
             {
                 if(fi.Name.Contains(".model"))
                 {
-                    models.Add(new FacialModel(fi.Name));
+                    models.Add(new FacialModel(path + fi.Name, fi.Name.Substring(0, fi.Name.LastIndexOf("."))));
                 }
             }
         }

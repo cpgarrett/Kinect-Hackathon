@@ -14,15 +14,23 @@ namespace Hackathon
     {
         public EnumIndexableCollection<FeaturePoint, Vector3DF> Features { get; private set; }
         private static float threshold = 0.01f;
+        public string Name { get; private set; }
 
         public FacialModel(EnumIndexableCollection<FeaturePoint, Vector3DF> features)
         {
             this.Features = features;
         }
 
-        public FacialModel(string file)
+        public FacialModel(EnumIndexableCollection<FeaturePoint, Vector3DF> features, string name)
+        {
+            this.Features = features;
+            this.Name = name;
+        } 
+
+        public FacialModel(string file, string name)
         {
             Features = ReadDataFromFile(file);
+            this.Name = name;
         }
 
         public void Write(string file)
