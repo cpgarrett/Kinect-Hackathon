@@ -8,29 +8,30 @@ using System.IO;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.FaceTracking;
 
-namespace FaceTrackingBasics
+namespace Hackathon
 {
     class FacialModel
     {
-        private readonly EnumIndexableCollection<FeaturePoint, Vector3DF> features;
+        private readonly EnumIndexableCollection<FeaturePoint, Vector3DF> Features { get; private set; }
+        private static const float threshold = 0.01f;
 
         public FacialModel(EnumIndexableCollection<FeaturePoint, Vector3DF> features)
         {
-            this.features = features;
+            this.Features = features;
         }
 
         public FacialModel(string file)
         {
-            features = ReadDataFromFile(file);
+            Features = ReadDataFromFile(file);
         }
 
         public void Write(string file)
         {
-            XElement root = new XElement("Points", new XAttribute("Elements", features.Count));
+            XElement root = new XElement("Points", new XAttribute("Elements", Features.Count));
 
-            for (int i = 0; i < features.Count; i++)
+            for (int i = 0; i < Features.Count; i++)
             {
-                Vector3DF temp = features[i];
+                Vector3DF temp = Features[i];
                 if (temp != null)
                     root.Add(new XElement("Vector",
                         new XAttribute("Index", i),
@@ -66,6 +67,17 @@ namespace FaceTrackingBasics
 
                 return new EnumIndexableCollection<FeaturePoint, Vector3DF>(vectors);
             }
+        }
+
+        public float match(FeaturePoint feature, Vector3DF feature3df)
+        {
+            Vector3DF reference = Features[feature];
+            double dx = (double) (feature3df.X - reference.X);
+            double dy = (double)(feature3df.Y - reference.Y);
+            double dz = (double)(feature3df.Z - reference.Z);
+
+            double d_2 = Math.Pow(dx, 2) + Math.Pow(dy, 2) + Math.Pow(dz, 2);
+            return 0.5f;
         }
     }
 }

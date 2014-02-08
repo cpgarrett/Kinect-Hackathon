@@ -8,8 +8,8 @@
     <ProjectGuid>{8FB2DEA6-9900-4FC5-87E4-B54188F62884}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FaceTrackingBasics</RootNamespace>
-    <AssemblyName>FaceTrackingBasics-WPF</AssemblyName>
+    <RootNamespace>Hackathon</RootNamespace>
+    <AssemblyName>Hackathon</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

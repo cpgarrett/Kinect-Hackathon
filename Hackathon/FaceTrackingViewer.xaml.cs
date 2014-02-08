@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace FaceTrackingBasics
+namespace Hackathon
 {
     using System;
     using System.Collections.Generic;
