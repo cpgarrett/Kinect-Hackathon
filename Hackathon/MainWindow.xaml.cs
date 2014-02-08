@@ -15,6 +15,7 @@ namespace Hackathon
     using System.Collections.Generic;
     using Microsoft.Kinect.Toolkit;
     using System.IO;
+    using System.Threading;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -51,6 +52,24 @@ namespace Hackathon
         void faceTrackingViewer_FacialModeCreated(object sender, FacialModelCreatedEventArgs e)
         {
             model = e.FacialModel;
+
+            FacialModel m = CompareModels();
+
+            if (m != null)
+                authenticationbar.SetAuthentication(true, m.Name);
+            else
+                authenticationbar.SetAuthentication(false, null);
+
+        }
+
+        private FacialModel CompareModels()
+        {
+            foreach(var m in this.models)
+            {
+                if(model == m)
+                    return m;
+            }
+            return null;
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs kinectChangedEventArgs)
