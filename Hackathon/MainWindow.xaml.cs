@@ -31,10 +31,15 @@ namespace FaceTrackingBasics
 
             var faceTrackingViewerBinding = new Binding("Kinect") { Source = sensorChooser };
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
-
+            faceTrackingViewer.FacialModeCreated += faceTrackingViewer_FacialModeCreated;
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
             sensorChooser.Start();
+        }
+
+        void faceTrackingViewer_FacialModeCreated(object sender, FacialModelCreatedEventArgs e)
+        {
+
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs kinectChangedEventArgs)

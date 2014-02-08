@@ -167,11 +167,8 @@ namespace FaceTrackingBasics
                         {
                             skeletonFaceTracker.OnFrameReady(this.Kinect, colorImageFormat, colorImage, depthImageFormat, depthImage, skeleton);
 
-                            var collection = skeletonFaceTracker.FaceModel;
-                            if (collection != null)
-                            {
-                                string vec = collection[FeaturePoint.AboveChin].ToString();
-                            }
+                            if(skeletonFaceTracker.SkeletonTrackingState == SkeletonTrackingState.Tracked)
+                                OnFacialModelCreated(new FacialModel(skeletonFaceTracker.FaceModel));
 
                             skeletonFaceTracker.LastTrackedFrame = skeletonFrame.FrameNumber;
                         }
@@ -200,6 +197,17 @@ namespace FaceTrackingBasics
                 }
             }
         }
+
+        public delegate void FacialModelCreatedEventHandler(object sender, FacialModelCreatedEventArgs e);
+
+        public event FacialModelCreatedEventHandler FacialModeCreated;
+
+        private void OnFacialModelCreated(FacialModel model)
+        {
+            if(FacialModeCreated != null)
+                FacialModeCreated(this, new FacialModelCreatedEventArgs(model));
+        }
+
 
         private void OnSensorChanged(KinectSensor oldSensor, KinectSensor newSensor)
         {
