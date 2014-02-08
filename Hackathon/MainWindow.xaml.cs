@@ -12,7 +12,9 @@ namespace Hackathon
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Collections.Generic;
     using Microsoft.Kinect.Toolkit;
+    using System.IO;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,10 +26,19 @@ namespace Hackathon
         private WriteableBitmap colorImageWritableBitmap;
         private byte[] colorImageData;
         private ColorImageFormat currentColorImageFormat = ColorImageFormat.Undefined;
+        private FacialModel model;
+        private string path = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\Hackathon\Models\");
+        private HashSet<FacialModel> models = new HashSet<FacialModel>();
+
 
         public MainWindow()
         {
             InitializeComponent();
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            LoadModels();
 
             var faceTrackingViewerBinding = new Binding("Kinect") { Source = sensorChooser };
             faceTrackingViewer.SetBinding(FaceTrackingViewer.KinectProperty, faceTrackingViewerBinding);
@@ -39,7 +50,7 @@ namespace Hackathon
 
         void faceTrackingViewer_FacialModeCreated(object sender, FacialModelCreatedEventArgs e)
         {
-
+            model = e.FacialModel;
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs kinectChangedEventArgs)
@@ -127,6 +138,34 @@ namespace Hackathon
                     this.colorImageData,
                     colorImageFrame.Width * Bgr32BytesPerPixel,
                     0);
+            }
+        }
+
+        private void captureBaseImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(userName.Text))
+            {
+                string text = userName.Text;
+
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    if (model != null)
+                    {
+                        model.Write(path + text + ".model");
+                        models.Add(model);
+                    }
+                }
+            }
+        }
+
+        private void LoadModels()
+        {
+            foreach(FileInfo fi in (new DirectoryInfo(path).EnumerateFiles()))
+            {
+                if(fi.Name.Contains(".model"))
+                {
+                    models.Add(new FacialModel(path + fi.Name, fi.Name.Substring(0, fi.Name.LastIndexOf("."))));
+                }
             }
         }
     }
